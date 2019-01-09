@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  bscshasura-development-postgres:
+    restart: unless-stopped
+    env_file: ../../.env
+    image: postgres
+    expose:
+      - 5432
+    environment:
+      - NETWORK_ACCESS=internal
+
+  bscshasura-development-hasura:
+    restart: unless-stopped
+    env_file: ../../.env
+    image: hasura/graphql-engine:latest
+    ports:
+      - "8080:8080"
+    depends_on: 
+      - bscshasura-development-postgres
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
